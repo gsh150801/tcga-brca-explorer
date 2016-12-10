@@ -30,14 +30,18 @@ fluidPage(
           target = "_blank"), 
         "when publishing results based on cBioPortal."))
   ),  
-  h3("Data"),
+  h3("Preparations"),
   fluidRow(
     column(4,
       wellPanel(
-        textInput("var1", textOutput("var1_lbl"), value = "FGFR4"),
-        textInput("var2", textOutput("var2_lbl"), value = "ERBB2"),
-        actionButton("retrieve_button", "Retrieve TCGA data from cBioPortal"),
-        checkboxInput("flip_axes", "Flip axes", value = FALSE)
+        textInput("ids_str", "Gene set", value = "ERBB2 FGFR4 EGFR TP53 PIK3CA GATA3 MAP3K1"),
+        actionButton("retrieve_button", "Retrieve TCGA data from cBioPortal")), 
+      p(textOutput("retrieved_genes")) 
+    ),
+    column(4,
+      wellPanel(
+        uiOutput("var_y_ui"),
+        uiOutput("var_x_ui")
       ))), 
   h3("Graphs"),
   p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),

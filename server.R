@@ -12,32 +12,34 @@ function(input, output) {
   
   retrieve_tcga_data <- reactive({
     input$retrieve_button
-    ids <- isolate(c(input$var1, input$var2))
+    ids <- unique(unlist(strsplit(input$ids_str, split = c(" ", ","))))
     retrieve_data(ids)
   })
   
-  output$var1_lbl <- renderText({ 
-    if (!input$flip_axes)
-      "Gene on vertical axis"
-    else
-      "Gene on horizontal axes"
+  retrieved_ids <- reactive({
+    varnams <- names(retrieve_tcga_data())
+    unique(unlist(lapply(strsplit(varnams, split = "_"), function(x) x[[1]])))
   })
   
-  output$var2_lbl <- renderText({ 
-    if (!input$flip_axes)
-      "Gene on horizontal axes"
-    else
-      "Gene on vertical axis"
+  output$retrieved_genes <- renderText({
+    paste("Data retrived for genes:", paste(retrieved_ids(), collapse = ", "))
+  })
+  
+  output$var_y_ui = renderUI({
+    selectInput("var_y", "Gene on vertical axis", 
+      choices = retrieved_ids(), 
+      selected = retrieved_ids()[1])
+  })
+  
+  output$var_x_ui = renderUI({
+    selectInput("var_x", "Gene on horizontal axes", 
+      choices = retrieved_ids(), 
+      selected = retrieved_ids()[min(2, length(retrieved_ids()))])
   })
   
   assemble_graph_data <- reactive({
-    if (!input$flip_axes) {
-      var_y <- isolate(input$var1)
-      var_x <- isolate(input$var2)
-    } else {
-      var_y <- isolate(input$var2)
-      var_x <- isolate(input$var1)
-    }
+    var_x <- input$var_x
+    var_y <- input$var_y
     
     graph_data <- retrieve_tcga_data() %>%
       mutate_(
@@ -54,10 +56,7 @@ function(input, output) {
   })
   
   output$tab1 <- renderTable({
-    if (!input$flip_axes) 
-      var_x <- isolate(input$var2)
-    else
-      var_x <- isolate(input$var1)
+    var_x <- input$var_x
     
     tab1 <- assemble_graph_data() %>%
       filter(!is.na(x_mut) & !is.na(y)) %>%
@@ -69,13 +68,8 @@ function(input, output) {
   })
   
   output$plot1 <- renderPlot({
-    if (!input$flip_axes) {
-      var_y <- isolate(input$var1)
-      var_x <- isolate(input$var2)
-    } else {
-      var_y <- isolate(input$var2)
-      var_x <- isolate(input$var1)
-    }
+    var_x <- input$var_x
+    var_y <- input$var_y
     
     if (input$show_mut) {
       gg1 <- assemble_graph_data() %>%
@@ -86,7 +80,7 @@ function(input, output) {
         filter(!is.na(x_mut) & !is.na(y)) %>%
         ggplot(aes(x = x_mutcat, y = y))
     }
-
+    
     if (input$mark_mut) {
       gg1 <- gg1 +
         geom_point(aes(col = x_mutcat, alpha = x_mutcat, shape = x_mutcat), 
@@ -116,14 +110,9 @@ function(input, output) {
   })
   
   output$plot2 <- renderPlot({
-    if (!input$flip_axes) {
-      var_y <- isolate(input$var1)
-      var_x <- isolate(input$var2)
-    } else {
-      var_y <- isolate(input$var2)
-      var_x <- isolate(input$var1)
-    }
-
+    var_x <- input$var_x
+    var_y <- input$var_y
+    
     gg2 <- assemble_graph_data() %>%
       filter(!is.na(x_gistic) & !is.na(y)) %>%
       ggplot(aes(x = x_gistic, y = y)) 
@@ -152,18 +141,13 @@ function(input, output) {
           x = paste0(var_x, ", putative CNA (GISTIC)"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
     }
-
+    
     plot(gg2)
   })
   
   output$plot3 <- renderPlot({
-    if (!input$flip_axes) {
-      var_y <- isolate(input$var1)
-      var_x <- isolate(input$var2)
-    } else {
-      var_y <- isolate(input$var2)
-      var_x <- isolate(input$var1)
-    }
+    var_x <- input$var_x
+    var_y <- input$var_y
     
     gg3 <- assemble_graph_data() %>%
       filter(!is.na(x_rna) & !is.na(y)) %>%
