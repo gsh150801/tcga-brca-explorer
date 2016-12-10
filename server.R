@@ -9,13 +9,32 @@ function(input, output) {
   
   retrive_tcga_data <- reactive({
     input$retreive_button
-    ids <- isolate(c(input$var_x, input$var_y))
+    ids <- isolate(c(input$var1, input$var2))
     retreive_data(ids)
   })
   
+  output$var1_lbl <- renderText({ 
+    if (!input$flip_axes)
+      "Gene on vertical axis"
+    else
+      "Gene on horizontal axes"
+  })
+  
+  output$var2_lbl <- renderText({ 
+    if (!input$flip_axes)
+      "Gene on horizontal axes"
+    else
+      "Gene on vertical axis"
+  })
+  
   assemble_graph_data <- reactive({
-    var_x <- isolate(input$var_x)
-    var_y <- isolate(input$var_y)
+    if (!input$flip_axes) {
+      var_y <- isolate(input$var1)
+      var_x <- isolate(input$var2)
+    } else {
+      var_y <- isolate(input$var2)
+      var_x <- isolate(input$var1)
+    }
     
     graph_data <- retrive_tcga_data() %>%
       mutate_(
@@ -38,8 +57,13 @@ function(input, output) {
   })
   
   output$plot1 <- renderPlot({
-    var_x <- isolate(input$var_x)
-    var_y <- isolate(input$var_y)
+    if (!input$flip_axes) {
+      var_y <- isolate(input$var1)
+      var_x <- isolate(input$var2)
+    } else {
+      var_y <- isolate(input$var2)
+      var_x <- isolate(input$var1)
+    }
     
     gg1 <- assemble_graph_data() %>%
       filter(!is.na(x_mutations) & !is.na(y)) %>%
@@ -56,8 +80,13 @@ function(input, output) {
   })
   
   output$plot2 <- renderPlot({
-    var_x <- isolate(input$var_x)
-    var_y <- isolate(input$var_y)
+    if (!input$flip_axes) {
+      var_y <- isolate(input$var1)
+      var_x <- isolate(input$var2)
+    } else {
+      var_y <- isolate(input$var2)
+      var_x <- isolate(input$var1)
+    }
     
     gg2 <- assemble_graph_data() %>%
       filter(!is.na(x_gistic) & !is.na(y)) %>%
@@ -74,8 +103,13 @@ function(input, output) {
   })
   
   output$plot3 <- renderPlot({
-    var_x <- isolate(input$var_x)
-    var_y <- isolate(input$var_y)
+    if (!input$flip_axes) {
+      var_y <- isolate(input$var1)
+      var_x <- isolate(input$var2)
+    } else {
+      var_y <- isolate(input$var2)
+      var_x <- isolate(input$var1)
+    }
     
     gg3 <- assemble_graph_data() %>%
       filter(!is.na(x_rna) & !is.na(y)) %>%
