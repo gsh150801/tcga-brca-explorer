@@ -44,7 +44,9 @@ fluidPage(
   fluidRow(
     column(4,
       p("Mutations"),
-      plotOutput("plot1")),
+      plotOutput("plot1"), 
+      checkboxInput("show_mut", "Show mutations", value = FALSE),
+      tableOutput("tab1")),
     column(4,
       p("Putative copy-number alterations (CNA)"),
       plotOutput("plot2")),
