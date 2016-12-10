@@ -115,10 +115,13 @@ function(input, output) {
       filter(!is.na(x_rna) & !is.na(y)) %>%
       ggplot(aes(x = x_rna, y = y)) + 
       geom_point(shape = 1, alpha = 0.5) + 
-      geom_smooth(col = "darkred", method = "loess") +
       labs(
         x = paste0(var_x, ", mRNA expression (log2 RNA-seq)"), 
         y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
+    if (input$smooth_method3 == "Linear regression")
+      gg3 <- gg3 + geom_smooth(col = "darkred", method = "lm")
+    else if (input$smooth_method3 == "Local polynomial regression (loess)") 
+      gg3 <- gg3 + geom_smooth(col = "darkred", method = "loess")
     plot(gg3)
   })
   

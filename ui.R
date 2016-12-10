@@ -50,7 +50,10 @@ fluidPage(
     column(4,
       p("mRNA expression"),
       plotOutput("plot3"), 
-      p(textOutput("text3")))
+      p(textOutput("text3")),
+      selectInput("smooth_method3", "Smoother",
+        choices = c("(none)", "Linear regression", "Local polynomial regression (loess)"), 
+        selected = "Local polynomial regression (loess)"))
   ),
   p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
   hr(),
@@ -67,5 +70,5 @@ fluidPage(
       href = "https://github.com/lovrot/tcga-brca-explorer",
       target = "_blank"),
     br(),
-    "Version 0.0.0.9001")
+    "Version 0.0.0.9002")
 )
