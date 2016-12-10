@@ -10,36 +10,40 @@ shapemutcat <- c("(wild-type)" = 1, "mutated" = 16)
 
 function(input, output) {
   
-  retrive_tcga_data <- reactive({
-    input$retreive_button
-    ids <- isolate(c(input$var1, input$var2))
-    retreive_data(ids)
+  retrieve_tcga_data <- reactive({
+    input$retrieve_button
+    ids <- setdiff(
+      unique(unlist(strsplit(input$ids_str, split = c(" ", ",")))), 
+      "")
+    retrieve_data(ids)
   })
   
-  output$var1_lbl <- renderText({ 
-    if (!input$flip_axes)
-      "Gene on vertical axis"
-    else
-      "Gene on horizontal axes"
+  retrieved_ids <- reactive({
+    varnams <- names(retrieve_tcga_data())
+    unique(unlist(lapply(strsplit(varnams, split = "_"), function(x) x[[1]])))
   })
   
-  output$var2_lbl <- renderText({ 
-    if (!input$flip_axes)
-      "Gene on horizontal axes"
-    else
-      "Gene on vertical axis"
+  output$retrieved_genes <- renderText({
+    paste("Data retrived for genes:", paste(retrieved_ids(), collapse = ", "))
+  })
+  
+  output$var_y_ui = renderUI({
+    selectInput("var_y", "Gene on vertical axis", 
+      choices = retrieved_ids(), 
+      selected = retrieved_ids()[1])
+  })
+  
+  output$var_x_ui = renderUI({
+    selectInput("var_x", "Gene on horizontal axes", 
+      choices = retrieved_ids(), 
+      selected = retrieved_ids()[min(2, length(retrieved_ids()))])
   })
   
   assemble_graph_data <- reactive({
-    if (!input$flip_axes) {
-      var_y <- isolate(input$var1)
-      var_x <- isolate(input$var2)
-    } else {
-      var_y <- isolate(input$var2)
-      var_x <- isolate(input$var1)
-    }
+    var_x <- input$var_x
+    var_y <- input$var_y
     
-    graph_data <- retrive_tcga_data() %>%
+    graph_data <- retrieve_tcga_data() %>%
       mutate_(
         x_mut = paste0(var_x, "_mutations"), 
         x_gistic = paste0(var_x, "_gistic"), 
@@ -54,10 +58,7 @@ function(input, output) {
   })
   
   output$tab1 <- renderTable({
-    if (!input$flip_axes) 
-      var_x <- isolate(input$var2)
-    else
-      var_x <- isolate(input$var1)
+    var_x <- input$var_x
     
     tab1 <- assemble_graph_data() %>%
       filter(!is.na(x_mut) & !is.na(y)) %>%
@@ -69,13 +70,8 @@ function(input, output) {
   })
   
   output$plot1 <- renderPlot({
-    if (!input$flip_axes) {
-      var_y <- isolate(input$var1)
-      var_x <- isolate(input$var2)
-    } else {
-      var_y <- isolate(input$var2)
-      var_x <- isolate(input$var1)
-    }
+    var_x <- input$var_x
+    var_y <- input$var_y
     
     if (input$show_mut) {
       gg1 <- assemble_graph_data() %>%
@@ -86,7 +82,7 @@ function(input, output) {
         filter(!is.na(x_mut) & !is.na(y)) %>%
         ggplot(aes(x = x_mutcat, y = y))
     }
-
+    
     if (input$mark_mut) {
       gg1 <- gg1 +
         geom_point(aes(col = x_mutcat, alpha = x_mutcat, shape = x_mutcat), 
@@ -96,7 +92,7 @@ function(input, output) {
         scale_colour_manual(values = colmutcat, na.value = "black", guide = FALSE) + 
         scale_alpha_manual(values = alphamutcat, na.value = 1, guide = FALSE) + 
         scale_shape_manual(values = shapemutcat, na.value = 4, guide = FALSE) + 
-        theme(axis.text.x=element_text(angle=45, hjust=1)) + 
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
           x = paste0(var_x, ", mutations"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
@@ -106,7 +102,7 @@ function(input, output) {
           position = position_jitter(h = 0,  w = 0.1)) + 
         geom_boxplot(col = "darkred", varwidth = TRUE,
           fill = "transparent", outlier.colour = "transparent") +
-        theme(axis.text.x=element_text(angle=45, hjust=1)) + 
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
           x = paste0(var_x, ", mutations"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
@@ -116,14 +112,9 @@ function(input, output) {
   })
   
   output$plot2 <- renderPlot({
-    if (!input$flip_axes) {
-      var_y <- isolate(input$var1)
-      var_x <- isolate(input$var2)
-    } else {
-      var_y <- isolate(input$var2)
-      var_x <- isolate(input$var1)
-    }
-
+    var_x <- input$var_x
+    var_y <- input$var_y
+    
     gg2 <- assemble_graph_data() %>%
       filter(!is.na(x_gistic) & !is.na(y)) %>%
       ggplot(aes(x = x_gistic, y = y)) 
@@ -136,7 +127,7 @@ function(input, output) {
         scale_colour_manual(values = colmutcat, na.value = "black") + 
         scale_alpha_manual(values = alphamutcat, na.value = 1) + 
         scale_shape_manual(values = shapemutcat, na.value = 4) + 
-        theme(axis.text.x=element_text(angle=45, hjust=1)) + 
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
           x = paste0(var_x, ", putative CNA (GISTIC)"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"),
@@ -147,23 +138,18 @@ function(input, output) {
           position = position_jitter(h = 0,  w = 0.1)) + 
         geom_boxplot(col = "darkred", varwidth = TRUE,
           fill = "transparent", outlier.colour = "transparent") +
-        theme(axis.text.x=element_text(angle=45, hjust=1)) + 
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
           x = paste0(var_x, ", putative CNA (GISTIC)"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
     }
-
+    
     plot(gg2)
   })
   
   output$plot3 <- renderPlot({
-    if (!input$flip_axes) {
-      var_y <- isolate(input$var1)
-      var_x <- isolate(input$var2)
-    } else {
-      var_y <- isolate(input$var2)
-      var_x <- isolate(input$var1)
-    }
+    var_x <- input$var_x
+    var_y <- input$var_y
     
     gg3 <- assemble_graph_data() %>%
       filter(!is.na(x_rna) & !is.na(y)) %>%

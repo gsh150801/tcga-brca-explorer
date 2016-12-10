@@ -1,4 +1,4 @@
-retreive_data <- function(ids) {
+retrieve_data <- function(ids) {
   conn <- CGDS("http://www.cbioportal.org/public-portal/")
   
   mutations_df <- getProfileData(conn,
