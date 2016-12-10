@@ -12,7 +12,9 @@ function(input, output) {
   
   retrieve_tcga_data <- reactive({
     input$retrieve_button
-    ids <- unique(unlist(strsplit(input$ids_str, split = c(" ", ","))))
+    ids <- setdiff(
+      unique(unlist(strsplit(input$ids_str, split = c(" ", ",")))), 
+      "")
     retrieve_data(ids)
   })
   
