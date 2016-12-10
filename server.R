@@ -10,10 +10,10 @@ shapemutcat <- c("(wild-type)" = 1, "mutated" = 16)
 
 function(input, output) {
   
-  retrive_tcga_data <- reactive({
-    input$retreive_button
+  retrieve_tcga_data <- reactive({
+    input$retrieve_button
     ids <- isolate(c(input$var1, input$var2))
-    retreive_data(ids)
+    retrieve_data(ids)
   })
   
   output$var1_lbl <- renderText({ 
@@ -39,7 +39,7 @@ function(input, output) {
       var_x <- isolate(input$var1)
     }
     
-    graph_data <- retrive_tcga_data() %>%
+    graph_data <- retrieve_tcga_data() %>%
       mutate_(
         x_mut = paste0(var_x, "_mutations"), 
         x_gistic = paste0(var_x, "_gistic"), 

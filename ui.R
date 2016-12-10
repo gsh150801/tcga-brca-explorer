@@ -36,7 +36,7 @@ fluidPage(
       wellPanel(
         textInput("var1", textOutput("var1_lbl"), value = "FGFR4"),
         textInput("var2", textOutput("var2_lbl"), value = "ERBB2"),
-        actionButton("retreive_button", "Retrive TCGA data from cBioPortal"),
+        actionButton("retrieve_button", "Retrieve TCGA data from cBioPortal"),
         checkboxInput("flip_axes", "Flip axes", value = FALSE)
       ))), 
   h3("Graphs"),
