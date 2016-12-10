@@ -41,6 +41,7 @@ fluidPage(
       ))), 
   h3("Graphs"),
   p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
+  checkboxInput("mark_mut", "Mark mutations in all graphs", value = FALSE),
   fluidRow(
     column(4,
       p("Mutations"),
