@@ -96,7 +96,7 @@ function(input, output) {
         scale_colour_manual(values = colmutcat, na.value = "black", guide = FALSE) + 
         scale_alpha_manual(values = alphamutcat, na.value = 1, guide = FALSE) + 
         scale_shape_manual(values = shapemutcat, na.value = 4, guide = FALSE) + 
-        theme(axis.text.x=element_text(angle=45, hjust=1)) + 
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
           x = paste0(var_x, ", mutations"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
@@ -106,7 +106,7 @@ function(input, output) {
           position = position_jitter(h = 0,  w = 0.1)) + 
         geom_boxplot(col = "darkred", varwidth = TRUE,
           fill = "transparent", outlier.colour = "transparent") +
-        theme(axis.text.x=element_text(angle=45, hjust=1)) + 
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
           x = paste0(var_x, ", mutations"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
@@ -136,7 +136,7 @@ function(input, output) {
         scale_colour_manual(values = colmutcat, na.value = "black") + 
         scale_alpha_manual(values = alphamutcat, na.value = 1) + 
         scale_shape_manual(values = shapemutcat, na.value = 4) + 
-        theme(axis.text.x=element_text(angle=45, hjust=1)) + 
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
           x = paste0(var_x, ", putative CNA (GISTIC)"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"),
@@ -147,7 +147,7 @@ function(input, output) {
           position = position_jitter(h = 0,  w = 0.1)) + 
         geom_boxplot(col = "darkred", varwidth = TRUE,
           fill = "transparent", outlier.colour = "transparent") +
-        theme(axis.text.x=element_text(angle=45, hjust=1)) + 
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
           x = paste0(var_x, ", putative CNA (GISTIC)"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
