@@ -42,18 +42,27 @@ function(input, output) {
         x_gistic = paste0(var_x, "_gistic"), 
         x_rna = paste0(var_x, "_rna"), 
         y = paste0(var_y, "_rna")) %>%
-        mutate(
-          x_mutcat = 
-            factor(x_mut == "(none)",
-              levels = c(TRUE, FALSE),
-              labels = c("(none)", "mutated")))
-      n_mutations <- length(levels(graph_data[, paste0(var_x, "_mutations")]))
-      if (n_mutations <= 5) {
-        graph_data <- mutate(graph_data, x_mutations = x_mut)
-      } else {
-        graph_data <- mutate(graph_data, x_mutations = x_mutcat)
-      }
-      return(graph_data)
+      mutate(
+        x_mutcat = 
+          factor(x_mut == "(none)",
+            levels = c(TRUE, FALSE),
+            labels = c("(none)", "mutated")))
+    return(graph_data)
+  })
+  
+  output$tab1 <- renderTable({
+    if (!input$flip_axes) 
+      var_x <- isolate(input$var2)
+    else
+      var_x <- isolate(input$var1)
+    
+    tab1 <- assemble_graph_data() %>%
+      filter(!is.na(x_mut) & !is.na(y)) %>%
+      select(x_mut) %>%
+      table() %>%
+      as.data.frame.table()
+    names(tab1) <- c(paste(var_x, "mutation"), "n")
+    tab1
   })
   
   output$plot1 <- renderPlot({
@@ -65,9 +74,17 @@ function(input, output) {
       var_x <- isolate(input$var1)
     }
     
-    gg1 <- assemble_graph_data() %>%
-      filter(!is.na(x_mutations) & !is.na(y)) %>%
-      ggplot(aes(x = x_mutations, y = y)) + 
+    if (input$show_mut) {
+      gg1 <- assemble_graph_data() %>%
+        filter(!is.na(x_mut) & !is.na(y)) %>%
+        ggplot(aes(x = x_mut, y = y))
+    } else {
+      gg1 <- assemble_graph_data() %>%
+        filter(!is.na(x_mut) & !is.na(y)) %>%
+        ggplot(aes(x = x_mutcat, y = y))
+    }
+    
+    gg1 <- gg1 + 
       geom_point(shape = 1, alpha = 0.5, 
         position = position_jitter(h = 0,  w = 0.1)) + 
       geom_boxplot(col = "darkred", varwidth = TRUE,

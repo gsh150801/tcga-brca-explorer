@@ -30,7 +30,7 @@ fluidPage(
           target = "_blank"), 
         "when publishing results based on cBioPortal."))
   ),  
-  fluidRow(column(12, h3("Data"))),
+  h3("Data"),
   fluidRow(
     column(4,
       wellPanel(
@@ -39,11 +39,14 @@ fluidPage(
         actionButton("retreive_button", "Retrive TCGA data from cBioPortal"),
         checkboxInput("flip_axes", "Flip axes", value = FALSE)
       ))), 
-  fluidRow(column(12, h3("Graphs"))),
+  h3("Graphs"),
+  p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
   fluidRow(
     column(4,
       p("Mutations"),
-      plotOutput("plot1")),
+      plotOutput("plot1"), 
+      checkboxInput("show_mut", "Show mutations", value = FALSE),
+      tableOutput("tab1")),
     column(4,
       p("Putative copy-number alterations (CNA)"),
       plotOutput("plot2")),
@@ -55,12 +58,11 @@ fluidPage(
         choices = c("(none)", "Linear regression", "Local polynomial regression (loess)"), 
         selected = "Local polynomial regression (loess)"))
   ),
-  p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
   hr(),
   p(
     "© 2016 John Lövrot",
     br(),
-    "This work is licensed under a",
+    "This data retrieval and visualisation tool is licensed under a",
     a("Creative Commons Attribution 4.0 International License",
       href = "http://creativecommons.org/licenses/by/4.0/",
       target = "_blank"),
@@ -70,5 +72,5 @@ fluidPage(
       href = "https://github.com/lovrot/tcga-brca-explorer",
       target = "_blank"),
     br(),
-    "Version 0.0.0.9002")
+    "Version 0.0.0.9003")
 )
