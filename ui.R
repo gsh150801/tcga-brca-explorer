@@ -34,10 +34,11 @@ fluidPage(
   fluidRow(
     column(4,
       wellPanel(
-        textInput("var_y", "Gene on vertical axis", value = "FGFR4"),
-        textInput("var_x", "Gene on horizontal axes", value = "ERBB2"),
-        actionButton("retreive_button", "Retrive TCGA data from cBioPortal")))
-  ), 
+        textInput("var1", textOutput("var1_lbl"), value = "FGFR4"),
+        textInput("var2", textOutput("var2_lbl"), value = "ERBB2"),
+        actionButton("retreive_button", "Retrive TCGA data from cBioPortal"),
+        checkboxInput("flip_axes", "Flip axes", value = FALSE)
+      ))), 
   fluidRow(column(12, h3("Graphs"))),
   fluidRow(
     column(4,
