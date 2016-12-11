@@ -10,40 +10,37 @@ shapemutcat <- c("(germline)" = 1, "mutated" = 16)
 
 function(input, output) {
   
-  retrieve_tcga_data <- reactive({
+  retrieved_tcga_data <- reactive({
     input$retrieve_button
     ids <- setdiff(
       unique(unlist(strsplit(input$ids_str, split = c(" ", ",")))), 
       "")
-    retrieve_data(ids)
-  })
-  
-  retrieved_ids <- reactive({
-    varnams <- names(retrieve_tcga_data())
-    unique(unlist(lapply(strsplit(varnams, split = "_"), function(x) x[[1]])))
+    retrieve_tcga_data(ids)
   })
   
   output$retrieved_genes <- renderText({
-    paste("Data retrieved for genes:", paste(retrieved_ids(), collapse = ", "))
+    paste(
+      "Data retrieved for genes:", 
+      paste(retrieved_tcga_data()$ids, collapse = ", "))
   })
   
   output$var_y_ui = renderUI({
+    ids <- retrieved_tcga_data()$ids
     selectInput("var_y", "Gene on vertical axis", 
-      choices = retrieved_ids(), 
-      selected = retrieved_ids()[1])
+      choices = ids, selected = ids[1])
   })
   
   output$var_x_ui = renderUI({
+    ids <- retrieved_tcga_data()$ids
     selectInput("var_x", "Gene on horizontal axes", 
-      choices = retrieved_ids(), 
-      selected = retrieved_ids()[min(2, length(retrieved_ids()))])
+      choices = ids, selected = ids[min(2, length(ids))])
   })
   
-  assemble_graph_data <- reactive({
+  assembled_graph_data <- reactive({
     var_x <- input$var_x
     var_y <- input$var_y
     
-    graph_data <- retrieve_tcga_data() %>%
+    graph_data <- retrieved_tcga_data()$data %>%
       mutate_(
         x_mut = paste0(var_x, "_mutations"), 
         x_gistic = paste0(var_x, "_gistic"), 
@@ -60,7 +57,7 @@ function(input, output) {
   output$tab1 <- renderTable({
     var_x <- input$var_x
     
-    tab1 <- assemble_graph_data() %>%
+    tab1 <- assembled_graph_data() %>%
       filter(!is.na(x_mut) & !is.na(y)) %>%
       select(x_mut) %>%
       table() %>%
@@ -74,11 +71,11 @@ function(input, output) {
     var_y <- input$var_y
     
     if (input$show_mut) {
-      gg1 <- assemble_graph_data() %>%
+      gg1 <- assembled_graph_data() %>%
         filter(!is.na(x_mut) & !is.na(y)) %>%
         ggplot(aes(x = x_mut, y = y))
     } else {
-      gg1 <- assemble_graph_data() %>%
+      gg1 <- assembled_graph_data() %>%
         filter(!is.na(x_mut) & !is.na(y)) %>%
         ggplot(aes(x = x_mutcat, y = y))
     }
@@ -115,7 +112,7 @@ function(input, output) {
     var_x <- input$var_x
     var_y <- input$var_y
     
-    gg2 <- assemble_graph_data() %>%
+    gg2 <- assembled_graph_data() %>%
       filter(!is.na(x_gistic) & !is.na(y)) %>%
       ggplot(aes(x = x_gistic, y = y)) 
     if (input$mark_mut) {
@@ -151,7 +148,7 @@ function(input, output) {
     var_x <- input$var_x
     var_y <- input$var_y
     
-    gg3 <- assemble_graph_data() %>%
+    gg3 <- assembled_graph_data() %>%
       filter(!is.na(x_rna) & !is.na(y)) %>%
       ggplot(aes(x = x_rna, y = y)) 
     if (input$mark_mut) {
@@ -179,7 +176,7 @@ function(input, output) {
   })
   
   output$text3 <- renderText({ 
-    graph_data <- assemble_graph_data() 
+    graph_data <- assembled_graph_data() 
     r <- cor(graph_data$x_rna, graph_data$y, 
       use = "complete.obs", method = "spearman")
     paste("Spearman's rank correlation coefficient:", format(r, digits = 2))
