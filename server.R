@@ -172,10 +172,9 @@ function(input, output) {
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
     }
     
-    if (input$smooth_method3 == "Linear regression")
-      gg3 <- gg3 + geom_smooth(col = "darkred", method = "lm")
-    else if (input$smooth_method3 == "Local polynomial regression (loess)") 
-      gg3 <- gg3 + geom_smooth(col = "darkred", method = "loess")
+    if (input$smooth_method3 != "(none)")
+      gg3 <- gg3 + geom_smooth(col = "darkred", method = input$smooth_method3)
+    
     plot(gg3)
   })
   

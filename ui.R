@@ -60,8 +60,11 @@ fluidPage(
       plotOutput("plot3"), 
       p(textOutput("text3")),
       selectInput("smooth_method3", "Smoother",
-        choices = c("(none)", "Linear regression", "Local polynomial regression (loess)"), 
-        selected = "Local polynomial regression (loess)"))
+        choices = c(
+          "(none)" = "(none)", 
+          "Linear regression" = "lm", 
+          "Local polynomial regression (loess)" = "loess"), 
+        selected = "loess"))
   ),
   hr(),
   p(
