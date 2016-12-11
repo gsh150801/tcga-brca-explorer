@@ -24,7 +24,7 @@ function(input, output) {
   })
   
   output$retrieved_genes <- renderText({
-    paste("Data retrived for genes:", paste(retrieved_ids(), collapse = ", "))
+    paste("Data retrieved for genes:", paste(retrieved_ids(), collapse = ", "))
   })
   
   output$var_y_ui = renderUI({
