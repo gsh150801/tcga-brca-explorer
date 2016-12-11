@@ -4,9 +4,9 @@ library(ggplot2)
 library(cgdsr)
 
 source("helpers.R")
-colmutcat <- c("(wild-type)" = "black", "mutated" = "#1070b8")
-alphamutcat <- c("(wild-type)" = 0.5, "mutated" = 1)
-shapemutcat <- c("(wild-type)" = 1, "mutated" = 16)
+colmutcat <- c("(germline)" = "black", "mutated" = "#1070b8")
+alphamutcat <- c("(germline)" = 0.5, "mutated" = 1)
+shapemutcat <- c("(germline)" = 1, "mutated" = 16)
 
 function(input, output) {
   
@@ -51,9 +51,9 @@ function(input, output) {
         y = paste0(var_y, "_rna")) %>%
       mutate(
         x_mutcat = 
-          factor(x_mut == "(wild-type)",
+          factor(x_mut == "(germline)",
             levels = c(TRUE, FALSE),
-            labels = c("(wild-type)", "mutated")))
+            labels = c("(germline)", "mutated")))
     return(graph_data)
   })
   
@@ -65,7 +65,7 @@ function(input, output) {
       select(x_mut) %>%
       table() %>%
       as.data.frame.table()
-    names(tab1) <- c(paste(var_x, "mutation(s)"), "n")
+    names(tab1) <- c(paste(var_x, "somatic point mutation(s)"), "n")
     tab1
   })
   
@@ -94,7 +94,7 @@ function(input, output) {
         scale_shape_manual(values = shapemutcat, na.value = 4, guide = FALSE) + 
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
-          x = paste0(var_x, ", mutations"), 
+          x = paste0(var_x, ", somatic point mutations"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
     } else {
       gg1 <- gg1 +
@@ -104,7 +104,7 @@ function(input, output) {
           fill = "transparent", outlier.colour = "transparent") +
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
-          x = paste0(var_x, ", mutations"), 
+          x = paste0(var_x, ", somatic point mutations"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
     }
     

@@ -7,13 +7,13 @@ retrieve_data <- function(ids) {
     caseList = "brca_tcga_all")
   names(mutations_df) <- paste0(names(mutations_df), "_mutations")
   mutations_df[] <- lapply(mutations_df, as.character)
-  mutations_df[is.na(mutations_df)] <- "(wild-type)"
+  mutations_df[is.na(mutations_df)] <- "(germline)"
   mutations_df[] <- lapply(mutations_df, 
     function(x) {
       x[x %in% "NaN"] <- NA
       x})
   mutations_df[] <- lapply(mutations_df, 
-    function(x) relevel(factor(x), ref = "(wild-type)"))
+    function(x) relevel(factor(x), ref = "(germline)"))
 
   gistic_df <- getProfileData(conn,
     genes = ids,
