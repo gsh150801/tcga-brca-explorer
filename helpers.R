@@ -39,9 +39,8 @@ retrieve_tcga_data <- function(ids) {
   names(rna_df) <- paste0(names(rna_df), "_rna")
   rna_df[] <- lapply(rna_df, function(x) log2(x + 1))
   
-  tcga_df <- cbind(mutations_df, gistic_df, rna_df) %>%
-    identity()
-  
+  tcga_df <- cbind(mutations_df, gistic_df, rna_df)
+
   return(list(
     "ids" = retrieved_ids,
     "data" = tcga_df))
