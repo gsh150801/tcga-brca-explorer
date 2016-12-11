@@ -41,7 +41,7 @@ fluidPage(
   h3("Graphs"),
   p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
   checkboxInput("mark_mut", "Mark somatic point mutations in all graphics", value = FALSE),
-  checkboxInput("by_subtype", "Facet by intrinsic molecular subtype in all graphics", value = FALSE),
+  checkboxInput("by_subtype", "Facet all graphics by intrinsic molecular subtype", value = FALSE),
   fluidRow(
     column(4,
       p("Somatic point mutations"),
