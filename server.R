@@ -60,7 +60,7 @@ function(input, output) {
       select(x_mut) %>%
       table() %>%
       as.data.frame.table()
-    names(tab1) <- c(paste0(var_x, ", somatic point mutation(s)"), "n")
+    names(tab1) <- c(paste0(var_x, ", AA change"), "n")
     tab1
   })
   
