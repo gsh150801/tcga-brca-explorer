@@ -40,7 +40,8 @@ fluidPage(
       ))), 
   h3("Graphs"),
   p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
-  checkboxInput("mark_mut", "Mark somatic point mutations in all graphs", value = FALSE),
+  checkboxInput("mark_mut", "Mark somatic point mutations in all graphics", value = FALSE),
+  checkboxInput("by_subtype", "Facet by intrinsic molecular subtype in all graphics", value = FALSE),
   fluidRow(
     column(4,
       p("Somatic point mutations"),
@@ -53,7 +54,8 @@ fluidPage(
     column(4,
       p("mRNA expression"),
       plotOutput("plot3"), 
-      p(textOutput("text3")),
+      p("Spearman's rank correlation coefficient, r"),
+      tableOutput("tab2"),
       selectInput("smooth_method3", "Smoother",
         choices = c(
           "(none)" = "(none)", 
