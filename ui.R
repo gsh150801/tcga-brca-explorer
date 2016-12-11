@@ -54,14 +54,14 @@ fluidPage(
     column(4,
       p("mRNA expression"),
       plotOutput("plot3"), 
-      p("Spearman's rank correlation coefficient, r"),
-      tableOutput("tab2"),
       selectInput("smooth_method3", "Smoother",
         choices = c(
           "(none)" = "(none)", 
           "Linear regression" = "lm", 
           "Local polynomial regression (loess)" = "loess"), 
-        selected = "loess"))
+        selected = "loess"),
+      p("Spearman's rank correlation coefficient, r"),
+      tableOutput("tab2"))
   ),
   hr(),
   p(
