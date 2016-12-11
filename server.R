@@ -4,46 +4,43 @@ library(ggplot2)
 library(cgdsr)
 
 source("helpers.R")
-colmutcat <- c("(wild-type)" = "black", "mutated" = "#1070b8")
-alphamutcat <- c("(wild-type)" = 0.5, "mutated" = 1)
-shapemutcat <- c("(wild-type)" = 1, "mutated" = 16)
+colmutcat <- c("(germline)" = "black", "mutated" = "#1070b8")
+alphamutcat <- c("(germline)" = 0.5, "mutated" = 1)
+shapemutcat <- c("(germline)" = 1, "mutated" = 16)
 
 function(input, output) {
   
-  retrieve_tcga_data <- reactive({
+  retrieved_tcga_data <- reactive({
     input$retrieve_button
     ids <- setdiff(
       unique(unlist(strsplit(input$ids_str, split = c(" ", ",")))), 
       "")
-    retrieve_data(ids)
-  })
-  
-  retrieved_ids <- reactive({
-    varnams <- names(retrieve_tcga_data())
-    unique(unlist(lapply(strsplit(varnams, split = "_"), function(x) x[[1]])))
+    retrieve_tcga_data(ids)
   })
   
   output$retrieved_genes <- renderText({
-    paste("Data retrived for genes:", paste(retrieved_ids(), collapse = ", "))
+    paste(
+      "Data retrieved for genes:", 
+      paste(retrieved_tcga_data()$ids, collapse = ", "))
   })
   
   output$var_y_ui = renderUI({
+    ids <- retrieved_tcga_data()$ids
     selectInput("var_y", "Gene on vertical axis", 
-      choices = retrieved_ids(), 
-      selected = retrieved_ids()[1])
+      choices = ids, selected = ids[1])
   })
   
   output$var_x_ui = renderUI({
+    ids <- retrieved_tcga_data()$ids
     selectInput("var_x", "Gene on horizontal axes", 
-      choices = retrieved_ids(), 
-      selected = retrieved_ids()[min(2, length(retrieved_ids()))])
+      choices = ids, selected = ids[min(2, length(ids))])
   })
   
-  assemble_graph_data <- reactive({
+  assembled_graph_data <- reactive({
     var_x <- input$var_x
     var_y <- input$var_y
     
-    graph_data <- retrieve_tcga_data() %>%
+    graph_data <- retrieved_tcga_data()$data %>%
       mutate_(
         x_mut = paste0(var_x, "_mutations"), 
         x_gistic = paste0(var_x, "_gistic"), 
@@ -51,21 +48,21 @@ function(input, output) {
         y = paste0(var_y, "_rna")) %>%
       mutate(
         x_mutcat = 
-          factor(x_mut == "(wild-type)",
+          factor(x_mut == "(germline)",
             levels = c(TRUE, FALSE),
-            labels = c("(wild-type)", "mutated")))
+            labels = c("(germline)", "mutated")))
     return(graph_data)
   })
   
   output$tab1 <- renderTable({
     var_x <- input$var_x
     
-    tab1 <- assemble_graph_data() %>%
+    tab1 <- assembled_graph_data() %>%
       filter(!is.na(x_mut) & !is.na(y)) %>%
       select(x_mut) %>%
       table() %>%
       as.data.frame.table()
-    names(tab1) <- c(paste(var_x, "mutation(s)"), "n")
+    names(tab1) <- c(paste0(var_x, ", somatic point mutation(s)"), "n")
     tab1
   })
   
@@ -74,11 +71,11 @@ function(input, output) {
     var_y <- input$var_y
     
     if (input$show_mut) {
-      gg1 <- assemble_graph_data() %>%
+      gg1 <- assembled_graph_data() %>%
         filter(!is.na(x_mut) & !is.na(y)) %>%
         ggplot(aes(x = x_mut, y = y))
     } else {
-      gg1 <- assemble_graph_data() %>%
+      gg1 <- assembled_graph_data() %>%
         filter(!is.na(x_mut) & !is.na(y)) %>%
         ggplot(aes(x = x_mutcat, y = y))
     }
@@ -94,7 +91,7 @@ function(input, output) {
         scale_shape_manual(values = shapemutcat, na.value = 4, guide = FALSE) + 
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
-          x = paste0(var_x, ", mutations"), 
+          x = paste0(var_x, ", somatic point mutations"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
     } else {
       gg1 <- gg1 +
@@ -104,7 +101,7 @@ function(input, output) {
           fill = "transparent", outlier.colour = "transparent") +
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
-          x = paste0(var_x, ", mutations"), 
+          x = paste0(var_x, ", somatic point mutations"), 
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
     }
     
@@ -115,7 +112,7 @@ function(input, output) {
     var_x <- input$var_x
     var_y <- input$var_y
     
-    gg2 <- assemble_graph_data() %>%
+    gg2 <- assembled_graph_data() %>%
       filter(!is.na(x_gistic) & !is.na(y)) %>%
       ggplot(aes(x = x_gistic, y = y)) 
     if (input$mark_mut) {
@@ -151,7 +148,7 @@ function(input, output) {
     var_x <- input$var_x
     var_y <- input$var_y
     
-    gg3 <- assemble_graph_data() %>%
+    gg3 <- assembled_graph_data() %>%
       filter(!is.na(x_rna) & !is.na(y)) %>%
       ggplot(aes(x = x_rna, y = y)) 
     if (input$mark_mut) {
@@ -172,15 +169,14 @@ function(input, output) {
           y = paste0(var_y, ", mRNA expression (log2 RNA-seq)"))
     }
     
-    if (input$smooth_method3 == "Linear regression")
-      gg3 <- gg3 + geom_smooth(col = "darkred", method = "lm")
-    else if (input$smooth_method3 == "Local polynomial regression (loess)") 
-      gg3 <- gg3 + geom_smooth(col = "darkred", method = "loess")
+    if (input$smooth_method3 != "(none)")
+      gg3 <- gg3 + geom_smooth(col = "darkred", method = input$smooth_method3)
+    
     plot(gg3)
   })
   
   output$text3 <- renderText({ 
-    graph_data <- assemble_graph_data() 
+    graph_data <- assembled_graph_data() 
     r <- cor(graph_data$x_rna, graph_data$y, 
       use = "complete.obs", method = "spearman")
     paste("Spearman's rank correlation coefficient:", format(r, digits = 2))

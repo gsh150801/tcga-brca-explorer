@@ -45,12 +45,12 @@ fluidPage(
       ))), 
   h3("Graphs"),
   p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
-  checkboxInput("mark_mut", "Mark mutations in all graphs", value = FALSE),
+  checkboxInput("mark_mut", "Mark somatic point mutations in all graphs", value = FALSE),
   fluidRow(
     column(4,
-      p("Mutations"),
+      p("Somatic point mutations"),
       plotOutput("plot1"), 
-      checkboxInput("show_mut", "Show mutations", value = FALSE),
+      checkboxInput("show_mut", "Show somatic point mutations", value = FALSE),
       tableOutput("tab1")),
     column(4,
       p("Putative copy-number alterations (CNA)"),
@@ -60,8 +60,11 @@ fluidPage(
       plotOutput("plot3"), 
       p(textOutput("text3")),
       selectInput("smooth_method3", "Smoother",
-        choices = c("(none)", "Linear regression", "Local polynomial regression (loess)"), 
-        selected = "Local polynomial regression (loess)"))
+        choices = c(
+          "(none)" = "(none)", 
+          "Linear regression" = "lm", 
+          "Local polynomial regression (loess)" = "loess"), 
+        selected = "loess"))
   ),
   hr(),
   p(
@@ -77,5 +80,5 @@ fluidPage(
       href = "https://github.com/lovrot/tcga-brca-explorer",
       target = "_blank"),
     br(),
-    "Version 0.0.0.9005")
+    "Version 0.0.0.9006")
 )
