@@ -4,6 +4,11 @@ library(ggplot2)
 library(cgdsr)
 
 source("helpers.R")
+
+ggplot2::theme_set(theme_classic() +
+    theme(axis.line.x = element_blank()) + 
+    theme(axis.line.y = element_blank()))
+
 colmutcat <- c("(germline)" = "black", "mutated" = "#1070b8")
 alphamutcat <- c("(germline)" = 0.5, "mutated" = 1)
 shapemutcat <- c("(germline)" = 1, "mutated" = 16)
