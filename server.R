@@ -56,7 +56,7 @@ function(input, output) {
       select(x_mut) %>%
       table() %>%
       as.data.frame.table()
-    names(tab1) <- c(paste0(input$var_x, ", AA change"), "n")
+    names(tab1) <- c(paste0(input$var_x, ", AA change(s)"), "n")
     tab1
   })
   
