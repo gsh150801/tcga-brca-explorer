@@ -1,9 +1,4 @@
 library(shiny)
-library(ggplot2)
-
-ggplot2::theme_set(theme_classic() +
-    theme(axis.line.x = element_blank()) + 
-    theme(axis.line.y = element_blank()))
 
 fluidPage(
   titlePanel("TCGA Breast Cancer Data Explorer"),
@@ -80,5 +75,5 @@ fluidPage(
       href = "https://github.com/lovrot/tcga-brca-explorer",
       target = "_blank"),
     br(),
-    "Version 0.0.0.9008")
+    "Version 0.0.0.9009")
 )
