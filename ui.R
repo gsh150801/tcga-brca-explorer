@@ -34,7 +34,7 @@ fluidPage(
   fluidRow(
     column(4,
       wellPanel(
-        textInput("ids_str", "Gene set", value = "ERBB2 FGFR4 EGFR TP53 PIK3CA GATA3 MAP3K1"),
+        textInput("query_str", "Gene set", value = "CDKN2A RB1 TP53"),
         actionButton("retrieve_button", "Retrieve TCGA data from cBioPortal")), 
       p(textOutput("retrieved_genes")) 
     ),
@@ -80,5 +80,5 @@ fluidPage(
       href = "https://github.com/lovrot/tcga-brca-explorer",
       target = "_blank"),
     br(),
-    "Version 0.0.0.9006")
+    "Version 0.0.0.9007")
 )
