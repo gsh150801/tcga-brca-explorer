@@ -1,3 +1,7 @@
+split_query_str <- function(query_str) {
+  ids <- unlist(strsplit(query_str, split =  " "))
+}
+
 retrieve_tcga_data <- function(ids) {
   conn <- CGDS("http://www.cbioportal.org/public-portal/")
   
@@ -30,6 +34,7 @@ retrieve_tcga_data <- function(ids) {
     caseList = "brca_tcga_all")
   
   retrieved_ids <- names(rna_df)
+  retrieved_ids <- ids[ids %in% retrieved_ids]  # keep original order
   
   names(rna_df) <- paste0(names(rna_df), "_rna")
   rna_df[] <- lapply(rna_df, function(x) log2(x + 1))
