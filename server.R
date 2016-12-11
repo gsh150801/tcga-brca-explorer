@@ -44,12 +44,20 @@ function(input, output) {
   })
   
   assembled_graphics_data <- reactive({
+    var_x <- input$var_x
+    var_y <- input$var_y
+    if (is.null(var_x) | is.null(var_y)) {
+      ids <- retrieved_tcga_data()$ids
+      var_x <- ids[1]
+      var_y <- ids[min(2, length(ids))]
+    }
+
     graphics_data <- retrieved_tcga_data()$data %>%
       mutate_(
-        x_mut = paste0(input$var_x, "_mutations"), 
-        x_gistic = paste0(input$var_x, "_gistic"), 
-        x_rna = paste0(input$var_x, "_rna"), 
-        y = paste0(input$var_y, "_rna")) %>%
+        x_mut = paste0(var_x, "_mutations"), 
+        x_gistic = paste0(var_x, "_gistic"), 
+        x_rna = paste0(var_x, "_rna"), 
+        y = paste0(var_y, "_rna")) %>%
       mutate(
         x_mutcat = 
           factor(x_mut == "(germline)",
