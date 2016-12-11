@@ -47,7 +47,7 @@ function(input, output) {
             levels = c(TRUE, FALSE),
             labels = c("(germline)", "mutated"))) %>%
       select(x_mut, x_mutcat, x_gistic, x_rna, y)
-    return(graphics_data)
+    graphics_data
   })
   
   output$tab1 <- renderTable({
