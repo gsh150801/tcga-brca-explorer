@@ -12,7 +12,7 @@ function(input, output) {
   
   retrieved_tcga_data <- reactive({
     input$retrieve_button
-    ids <- split_query_str(input$query_str)
+    ids <- split_query_str(isolate(input$query_str))
     retrieve_tcga_data(ids)
   })
   
