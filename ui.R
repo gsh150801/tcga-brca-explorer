@@ -40,7 +40,8 @@ fluidPage(
       ))), 
   h3("Graphs"),
   p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
-  checkboxInput("mark_mut", "Mark somatic point mutations in all graphs", value = FALSE),
+  checkboxInput("mark_mut", "Mark somatic point mutations in all graphics", value = FALSE),
+  checkboxInput("by_subtype", "Facet by intrinsic molecular subtype", value = FALSE),
   fluidRow(
     column(4,
       p("Somatic point mutations"),
@@ -53,13 +54,14 @@ fluidPage(
     column(4,
       p("mRNA expression"),
       plotOutput("plot3"), 
-      p(textOutput("text3")),
       selectInput("smooth_method3", "Smoother",
         choices = c(
           "(none)" = "(none)", 
           "Linear regression" = "lm", 
           "Local polynomial regression (loess)" = "loess"), 
-        selected = "loess"))
+        selected = "loess"),
+      p("Spearman's rank correlation coefficient, r"),
+      tableOutput("tab2"))
   ),
   hr(),
   p(
@@ -75,5 +77,5 @@ fluidPage(
       href = "https://github.com/lovrot/tcga-brca-explorer",
       target = "_blank"),
     br(),
-    "Version 0.0.0.9009")
+    "Version 0.0.0.9010")
 )
