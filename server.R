@@ -20,6 +20,10 @@ function(input, output) {
     ids <- split_query_str(isolate(input$query_str))
     retrieve_tcga_data(ids)
   })
+  # retrieved_tcga_data <- eventReactive(input$retrieve_button, {
+  #   ids <- split_query_str(isolate(input$query_str))
+  #   retrieve_tcga_data(ids)
+  # })
   
   output$retrieved_genes <- renderText({
     paste(
