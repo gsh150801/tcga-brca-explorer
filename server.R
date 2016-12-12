@@ -3,7 +3,8 @@ library(dplyr)
 library(ggplot2)
 library(cgdsr)
 
-load(file.path("data", "pam50centroids.rda"))
+# load(file.path("data", "pam50centroids.rda"))
+load(file.path("data", "subtype_data.rda"))
 
 source("utility_functions.R")
 
@@ -25,7 +26,7 @@ function(input, output) {
   
   conn <- CGDS("http://www.cbioportal.org/public-portal/")
   
-  subtype_data <- perform_subtype_classification(conn, pam50centroids)
+  # subtype_data <- perform_subtype_classification(conn, pam50centroids)
   
   retrieved_tcga_data <- reactive({
     input$retrieve_button
@@ -126,7 +127,7 @@ function(input, output) {
           y = paste0(input$var_y, ", mRNA expression (log2 RNA-seq)"))
     }
     if (input$by_subtype)
-      gg <- gg + facet_wrap(~ subtype2, as.table = FALSE)
+      gg <- gg + facet_wrap(~ subtype2, nrow = 2, as.table = FALSE)
     plot(gg)
   })
   
@@ -160,7 +161,7 @@ function(input, output) {
           y = paste0(input$var_y, ", mRNA expression (log2 RNA-seq)"))
     }
     if (input$by_subtype)
-      gg <- gg + facet_wrap(~ subtype2, as.table = FALSE)
+      gg <- gg + facet_wrap(~ subtype2, nrow = 2, as.table = FALSE)
     plot(gg)
   })
   
@@ -188,7 +189,7 @@ function(input, output) {
     if (input$smooth_method3 != "(none)")
       gg <- gg + geom_smooth(col = "darkred", method = input$smooth_method3)
     if (input$by_subtype)
-      gg <- gg + facet_wrap(~ subtype2, as.table = FALSE)
+      gg <- gg + facet_wrap(~ subtype2, nrow = 2, as.table = FALSE)
     plot(gg)
   })
   
