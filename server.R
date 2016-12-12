@@ -126,7 +126,7 @@ function(input, output) {
           y = paste0(input$var_y, ", mRNA expression (log2 RNA-seq)"))
     }
     if (input$by_subtype)
-      gg <- gg + facet_wrap(~ subtype2, as.table = FALSE)
+      gg <- gg + facet_wrap(~ subtype2, nrow = 2, as.table = FALSE)
     plot(gg)
   })
   
@@ -160,7 +160,7 @@ function(input, output) {
           y = paste0(input$var_y, ", mRNA expression (log2 RNA-seq)"))
     }
     if (input$by_subtype)
-      gg <- gg + facet_wrap(~ subtype2, as.table = FALSE)
+      gg <- gg + facet_wrap(~ subtype2, nrow = 2, as.table = FALSE)
     plot(gg)
   })
   
@@ -188,7 +188,7 @@ function(input, output) {
     if (input$smooth_method3 != "(none)")
       gg <- gg + geom_smooth(col = "darkred", method = input$smooth_method3)
     if (input$by_subtype)
-      gg <- gg + facet_wrap(~ subtype2, as.table = FALSE)
+      gg <- gg + facet_wrap(~ subtype2, nrow = 2, as.table = FALSE)
     plot(gg)
   })
   
