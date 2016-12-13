@@ -29,8 +29,8 @@ fluidPage(
   fluidRow(
     column(4,
       wellPanel(
-        textInput("query_str", "Gene set", value = "CDKN2A RB1 TP53"),
-        actionButton("retrieve_button", "Retrieve TCGA data from cBioPortal")), 
+        textInput("query_str", "Genes", value = "CDKN2A RB1 TP53"),
+        actionButton("retrieve_button", "Retrieve data")), 
       p(textOutput("retrieved_genes")) 
     ),
     column(4,
@@ -40,13 +40,13 @@ fluidPage(
       ))), 
   h3("Graphs"),
   p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
-  checkboxInput("mark_mut", "Mark somatic point mutations in all graphics", value = FALSE),
-  checkboxInput("by_subtype", "Facet by intrinsic molecular subtype", value = FALSE),
+  checkboxInput("mark_mut", "Mark mutations in all graphics", value = FALSE),
+  checkboxInput("by_subtype", "Facet by molecular subtype", value = FALSE),
   fluidRow(
     column(4,
-      p("Somatic point mutations"),
+      p("Predicted somatic non-silent mutations"),
       plotOutput("plot1"), 
-      checkboxInput("show_mut", "Show somatic point mutations", value = FALSE),
+      checkboxInput("show_mut", "Show mutations in graphics", value = FALSE),
       tableOutput("tab1")),
     column(4,
       p("Putative copy-number alterations (CNA)"),

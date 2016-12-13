@@ -107,7 +107,7 @@ function(input, output) {
         scale_shape_manual(values = shapemutcat, na.value = 4, guide = FALSE) + 
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
-          x = paste0(input$var_x, ", somatic point mutations"), 
+          x = paste0(input$var_x, ", predicted somatic non-silent mutation"), 
           y = paste0(input$var_y, ", mRNA expression (log2 RNA-seq)"))
     } else {
       gg <- gg +
@@ -117,7 +117,7 @@ function(input, output) {
           fill = "transparent", outlier.colour = "transparent") +
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
-          x = paste0(input$var_x, ", somatic point mutations"), 
+          x = paste0(input$var_x, ", predicted somatic non-silent mutation"), 
           y = paste0(input$var_y, ", mRNA expression (log2 RNA-seq)"))
     }
     if (input$by_subtype)
