@@ -17,11 +17,11 @@ fluidPage(
         br(),
         "Please cite",
         a("Gao et al. Sci. Signal. 2013", 
-          href = "http://www.ncbi.nlm.nih.gov/pubmed/23550210",
+          href = "https://dx.doi.org/10.1126/scisignal.2004088",
           target = "_blank"), 
         "and", 
         a("Cerami et al. Cancer Discov. 2012", 
-          href = "http://cancerdiscovery.aacrjournals.org/content/2/5/401.abstract",
+          href = "https://dx.doi.org/10.1158/2159-8290.CD-12-0095",
           target = "_blank"), 
         "when publishing results based on cBioPortal."))
   ),  
