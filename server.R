@@ -47,12 +47,18 @@ function(input, output) {
   })
   
   assembled_graphics_data <- reactive({
+    ids <- retrieved_tcga_data()$ids
     var_x <- input$var_x
     var_y <- input$var_y
     if (is.null(var_x) | is.null(var_y)) {
-      ids <- retrieved_tcga_data()$ids
-      var_y <- ids[1]
       var_x <- ids[min(2, length(ids))]
+      var_y <- ids[1]
+    } 
+    if (!(var_x %in% ids)) {
+      var_x <- ids[min(2, length(ids))]
+    }
+    if (!(var_y %in% ids)) {
+      var_y <- ids[1]
     }
     
     graphics_data <- retrieved_tcga_data()$data %>%
