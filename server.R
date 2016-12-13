@@ -30,7 +30,7 @@ function(input, output) {
   
   output$retrieved_genes <- renderUI({
     p("Data retrieved for genes:",
-      lapply(ids, function(x)
+      lapply(retrieved_tcga_data()$ids, function(x)
         a(x,
           href = paste0("http://www.genecards.org/cgi-bin/carddisp.pl?gene=", x),
           target = "_blank")))
