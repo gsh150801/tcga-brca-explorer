@@ -1,7 +1,7 @@
 library(shiny)
 
 fluidPage(
-  titlePanel("TCGA Breast Cancer Data Explorer"),
+  titlePanel("TCGA breast cancer data explorer"),
   fluidRow(
     column(12,
       p(
@@ -17,11 +17,11 @@ fluidPage(
         br(),
         "Please cite",
         a("Gao et al. Sci. Signal. 2013", 
-          href = "http://www.ncbi.nlm.nih.gov/pubmed/23550210",
+          href = "https://dx.doi.org/10.1126/scisignal.2004088",
           target = "_blank"), 
         "and", 
         a("Cerami et al. Cancer Discov. 2012", 
-          href = "http://cancerdiscovery.aacrjournals.org/content/2/5/401.abstract",
+          href = "https://dx.doi.org/10.1158/2159-8290.CD-12-0095",
           target = "_blank"), 
         "when publishing results based on cBioPortal."))
   ),  
@@ -29,8 +29,8 @@ fluidPage(
   fluidRow(
     column(4,
       wellPanel(
-        textInput("query_str", "Gene set", value = "CDKN2A RB1 TP53"),
-        actionButton("retrieve_button", "Retrieve TCGA data from cBioPortal")), 
+        textInput("query_str", "Genes", value = "CDKN2A RB1 TP53"),
+        actionButton("retrieve_button", "Retrieve data")), 
       p(textOutput("retrieved_genes")) 
     ),
     column(4,
@@ -38,15 +38,15 @@ fluidPage(
         uiOutput("var_y_ui"),
         uiOutput("var_x_ui")
       ))), 
-  h3("Graphs"),
+  h3("Graphics"),
   p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
-  checkboxInput("mark_mut", "Mark somatic point mutations in all graphics", value = FALSE),
-  checkboxInput("by_subtype", "Facet by intrinsic molecular subtype", value = FALSE),
+  checkboxInput("mark_mut", "Mark mutations in all graphics", value = FALSE),
+  checkboxInput("by_subtype", "Facet by molecular subtype", value = FALSE),
   fluidRow(
     column(4,
-      p("Somatic point mutations"),
+      p("Predicted somatic non-silent mutations"),
       plotOutput("plot1"), 
-      checkboxInput("show_mut", "Show somatic point mutations", value = FALSE),
+      checkboxInput("show_mut", "Show mutations in graphics", value = FALSE),
       tableOutput("tab1")),
     column(4,
       p("Putative copy-number alterations (CNA)"),
@@ -77,5 +77,5 @@ fluidPage(
       href = "https://github.com/lovrot/tcga-brca-explorer",
       target = "_blank"),
     br(),
-    "Version 0.0.0.9011")
+    "Version 0.0.0.9012")
 )

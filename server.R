@@ -3,8 +3,7 @@ library(dplyr)
 library(ggplot2)
 library(cgdsr)
 
-# load(file.path("data", "pam50centroids.rda"))
-load(file.path("data", "subtype_data.rda"))
+load(file.path("data", "pam50centroids.rda"))
 
 source("utility_functions.R")
 
@@ -15,19 +14,14 @@ ggplot2::theme_set(theme_classic() +
 colmutcat <- c("(germline)" = "black", "mutated" = "#1070b8")
 alphamutcat <- c("(germline)" = 0.5, "mutated" = 1)
 shapemutcat <- c("(germline)" = 1, "mutated" = 16)
-# colsubtypecd <- c(
-#   "LA" = "#2a3188",
-#   "LB" = "#419ad2",
-#   "H2" = "#d4279c",
-#   "BL" = "#97191e",
-#   "NBL " ="#66c530")
+
+conn <- CGDS("http://www.cbioportal.org/public-portal/")
+subtype_data <- perform_subtype_classification(conn, pam50centroids)
 
 function(input, output) {
   
   conn <- CGDS("http://www.cbioportal.org/public-portal/")
-  
-  # subtype_data <- perform_subtype_classification(conn, pam50centroids)
-  
+
   retrieved_tcga_data <- reactive({
     input$retrieve_button
     ids <- split_query_str(isolate(input$query_str))
@@ -73,12 +67,7 @@ function(input, output) {
             levels = c(TRUE, FALSE),
             labels = c("(germline)", "mutated"))) %>%
       '['(c("subjid", "x_mut", "x_mutcat", "x_gistic", "x_rna", "y")) %>%
-      left_join(subtype_data, by = "subjid") %>%
-      mutate(
-        subtype2 = factor(as.character(subtype), 
-          levels = c(
-            "HER2-enriched", "Basal-like", "Normal breast-like", 
-            "Luminal A", "Luminal B")))
+      left_join(subtype_data, by = "subjid")
     graphics_data
   })
   
@@ -113,7 +102,7 @@ function(input, output) {
         scale_shape_manual(values = shapemutcat, na.value = 4, guide = FALSE) + 
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
-          x = paste0(input$var_x, ", somatic point mutations"), 
+          x = paste0(input$var_x, ", predicted somatic non-silent mutation"), 
           y = paste0(input$var_y, ", mRNA expression (log2 RNA-seq)"))
     } else {
       gg <- gg +
@@ -123,7 +112,7 @@ function(input, output) {
           fill = "transparent", outlier.colour = "transparent") +
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
         labs(
-          x = paste0(input$var_x, ", somatic point mutations"), 
+          x = paste0(input$var_x, ", predicted somatic non-silent mutation"), 
           y = paste0(input$var_y, ", mRNA expression (log2 RNA-seq)"))
     }
     if (input$by_subtype)

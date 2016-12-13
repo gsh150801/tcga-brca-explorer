@@ -17,9 +17,4 @@ lkup <- c(
   "Normal" = "NBL")
 colnames(pam50centroids) <- lkup[colnames(pam50$centroids)]
 
-# save(pam50centroids, file = file.path("data", "pam50centroids.rda"))
-
-conn <- CGDS("http://www.cbioportal.org/public-portal/")
-subtype_data <- perform_subtype_classification(conn, pam50centroids)
-
-save(subtype_data, file = file.path("data", "subtype_data.rda"))
+save(pam50centroids, file = file.path("data", "pam50centroids.rda"))
