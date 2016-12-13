@@ -31,7 +31,7 @@ fluidPage(
       wellPanel(
         textInput("query_str", "Genes", value = "CDKN2A RB1 TP53"),
         actionButton("retrieve_data_button", "Retrieve data")), 
-      p(textOutput("retrieved_genes")) 
+      htmlOutput("retrieved_genes") 
     ),
     column(4,
       wellPanel(
@@ -77,5 +77,5 @@ fluidPage(
       href = "https://github.com/lovrot/tcga-brca-explorer",
       target = "_blank"),
     br(),
-    "Version 0.0.0.9013")
+    "Version 0.0.0.9014")
 )

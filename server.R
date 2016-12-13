@@ -21,19 +21,21 @@ subtype_data <- perform_subtype_classification(conn, pam50centroids)
 function(input, output) {
   
   conn <- CGDS("http://www.cbioportal.org/public-portal/")
-
+  
   retrieved_tcga_data <- reactive({
     input$retrieve_data_button
     ids <- split_query_str(isolate(input$query_str))
     retrieve_tcga_data(conn, ids)
   })
   
-  output$retrieved_genes <- renderText({
-    paste(
-      "Data retrieved for genes:", 
-      paste(retrieved_tcga_data()$ids, collapse = ", "))
+  output$retrieved_genes <- renderUI({
+    p("Data retrieved for genes:",
+      lapply(ids, function(x)
+        a(x,
+          href = paste0("http://www.genecards.org/cgi-bin/carddisp.pl?gene=", x),
+          target = "_blank")))
   })
-  
+
   output$var_y_ui = renderUI({
     ids <- retrieved_tcga_data()$ids
     selectInput("var_y", "Gene on vertical axis", 
