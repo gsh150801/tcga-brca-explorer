@@ -2,6 +2,8 @@ require(Biobase)
 require(org.Hs.eg.db)
 require(cgdsr)
 
+source("utility_functions.R")
+
 data("pam50", package = "genefu")
 pam50centroids <- pam50$centroids
 
