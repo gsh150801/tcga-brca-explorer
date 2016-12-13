@@ -3,8 +3,7 @@ library(dplyr)
 library(ggplot2)
 library(cgdsr)
 
-# load(file.path("data", "pam50centroids.rda"))
-load(file.path("data", "subtype_data.rda"))
+load(file.path("data", "pam50centroids.rda"))
 
 source("utility_functions.R")
 
@@ -22,12 +21,13 @@ shapemutcat <- c("(germline)" = 1, "mutated" = 16)
 #   "BL" = "#97191e",
 #   "NBL " ="#66c530")
 
+conn <- CGDS("http://www.cbioportal.org/public-portal/")
+subtype_data <- perform_subtype_classification(conn, pam50centroids)
+
 function(input, output) {
   
   conn <- CGDS("http://www.cbioportal.org/public-portal/")
-  
-  # subtype_data <- perform_subtype_classification(conn, pam50centroids)
-  
+
   retrieved_tcga_data <- reactive({
     input$retrieve_button
     ids <- split_query_str(isolate(input$query_str))
