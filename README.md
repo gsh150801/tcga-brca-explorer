@@ -1,7 +1,7 @@
 TCGA breast cancer data explorer
 ================================
 
-A data retrieval and visualisation tool to perform basic explorations of TCGA breast cancer data retrieved from [cBioPortal](http://www.cbioportal.org/). The tool is based on the [shiny](http://shiny.rstudio.com/) web application framework for R and deployed at [lovrot.shinyapps.io/tcga-brca-explorer](http://lovrot.shinyapps.io/tcga-brca-explorer).
+A data retrieval and visualisation tool to perform basic explorations of [TCGA](http://cancergenome.nih.gov/) breast cancer data retrieved from [cBioPortal](http://www.cbioportal.org/). The tool is based on the [shiny](http://shiny.rstudio.com/) web application framework for R and deployed at [lovrot.shinyapps.io/tcga-brca-explorer](http://lovrot.shinyapps.io/tcga-brca-explorer).
 
 - - -
 
