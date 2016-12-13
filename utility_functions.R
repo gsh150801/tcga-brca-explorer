@@ -84,5 +84,7 @@ perform_subtype_classification <- function(conn, pam50centroids) {
       levels = names(subtype_lkup)),
     subtype = factor(subtype_lkup[subtypecd],
       levels = subtype_lkup), 
+    subtype2 = factor(subtype_lkup[subtypecd],
+      levels = subtype_lkup[c("H2", "BL", "NBL", "LA", "LB")]), 
     stringsAsFactors = FALSE)
 }

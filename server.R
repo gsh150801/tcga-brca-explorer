@@ -67,12 +67,7 @@ function(input, output) {
             levels = c(TRUE, FALSE),
             labels = c("(germline)", "mutated"))) %>%
       '['(c("subjid", "x_mut", "x_mutcat", "x_gistic", "x_rna", "y")) %>%
-      left_join(subtype_data, by = "subjid") %>%
-      mutate(
-        subtype2 = factor(as.character(subtype), 
-          levels = c(
-            "HER2-enriched", "Basal-like", "Normal breast-like", 
-            "Luminal A", "Luminal B")))
+      left_join(subtype_data, by = "subjid")
     graphics_data
   })
   
