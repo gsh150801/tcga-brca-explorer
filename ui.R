@@ -38,7 +38,7 @@ fluidPage(
         uiOutput("var_y_ui"),
         uiOutput("var_x_ui")
       ))), 
-  h3("Graphs"),
+  h3("Graphics"),
   p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
   checkboxInput("mark_mut", "Mark mutations in all graphics", value = FALSE),
   checkboxInput("by_subtype", "Facet by molecular subtype", value = FALSE),
