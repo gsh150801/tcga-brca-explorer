@@ -23,7 +23,7 @@ function(input, output) {
   conn <- CGDS("http://www.cbioportal.org/public-portal/")
 
   retrieved_tcga_data <- reactive({
-    input$retrieve_button
+    input$retrieve_data_button
     ids <- split_query_str(isolate(input$query_str))
     retrieve_tcga_data(conn, ids)
   })
@@ -47,12 +47,18 @@ function(input, output) {
   })
   
   assembled_graphics_data <- reactive({
+    ids <- retrieved_tcga_data()$ids
     var_x <- input$var_x
     var_y <- input$var_y
     if (is.null(var_x) | is.null(var_y)) {
-      ids <- retrieved_tcga_data()$ids
-      var_y <- ids[1]
       var_x <- ids[min(2, length(ids))]
+      var_y <- ids[1]
+    } 
+    if (!(var_x %in% ids)) {
+      var_x <- ids[min(2, length(ids))]
+    }
+    if (!(var_y %in% ids)) {
+      var_y <- ids[1]
     }
     
     graphics_data <- retrieved_tcga_data()$data %>%
@@ -81,7 +87,7 @@ function(input, output) {
     tab1
   })
   
-  output$plot1 <- renderPlot({
+  output$fig1 <- renderPlot({
     if (input$show_mut) {
       gg <- assembled_graphics_data() %>%
         filter(!is.na(x_mut) & !is.na(y)) %>%
@@ -120,7 +126,7 @@ function(input, output) {
     plot(gg)
   })
   
-  output$plot2 <- renderPlot({
+  output$fig2 <- renderPlot({
     gg <- assembled_graphics_data() %>%
       filter(!is.na(x_gistic) & !is.na(y)) %>%
       ggplot(aes(x = x_gistic, y = y)) 
@@ -154,7 +160,7 @@ function(input, output) {
     plot(gg)
   })
   
-  output$plot3 <- renderPlot({
+  output$fig3 <- renderPlot({
     gg <- assembled_graphics_data() %>%
       filter(!is.na(x_rna) & !is.na(y)) %>%
       ggplot(aes(x = x_rna, y = y)) 
@@ -175,8 +181,8 @@ function(input, output) {
           x = paste0(input$var_x, ", mRNA expression (log2 RNA-seq)"), 
           y = paste0(input$var_y, ", mRNA expression (log2 RNA-seq)"))
     }
-    if (input$smooth_method3 != "(none)")
-      gg <- gg + geom_smooth(col = "darkred", method = input$smooth_method3)
+    if (input$fig3_smooth_method != "(none)")
+      gg <- gg + geom_smooth(col = "darkred", method = input$fig3_smooth_method)
     if (input$by_subtype)
       gg <- gg + facet_wrap(~ subtype2, nrow = 2, as.table = FALSE)
     plot(gg)

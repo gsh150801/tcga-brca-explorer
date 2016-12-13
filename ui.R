@@ -30,7 +30,7 @@ fluidPage(
     column(4,
       wellPanel(
         textInput("query_str", "Genes", value = "CDKN2A RB1 TP53"),
-        actionButton("retrieve_button", "Retrieve data")), 
+        actionButton("retrieve_data_button", "Retrieve data")), 
       p(textOutput("retrieved_genes")) 
     ),
     column(4,
@@ -45,16 +45,16 @@ fluidPage(
   fluidRow(
     column(4,
       p("Predicted somatic non-silent mutations"),
-      plotOutput("plot1"), 
+      plotOutput("fig1"), 
       checkboxInput("show_mut", "Show mutations in graphics", value = FALSE),
       tableOutput("tab1")),
     column(4,
       p("Putative copy-number alterations (CNA)"),
-      plotOutput("plot2")),
+      plotOutput("fig2")),
     column(4,
       p("mRNA expression"),
-      plotOutput("plot3"), 
-      selectInput("smooth_method3", "Smoother",
+      plotOutput("fig3"), 
+      selectInput("fig3_smooth_method", "Smoother",
         choices = c(
           "(none)" = "(none)", 
           "Linear regression" = "lm", 
@@ -77,5 +77,5 @@ fluidPage(
       href = "https://github.com/lovrot/tcga-brca-explorer",
       target = "_blank"),
     br(),
-    "Version 0.0.0.9012")
+    "Version 0.0.0.9013")
 )
