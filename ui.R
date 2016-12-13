@@ -30,7 +30,7 @@ fluidPage(
     column(4,
       wellPanel(
         textInput("query_str", "Genes", value = "CDKN2A RB1 TP53"),
-        actionButton("retrieve_button", "Retrieve data")), 
+        actionButton("retrieve_data_button", "Retrieve data")), 
       p(textOutput("retrieved_genes")) 
     ),
     column(4,
@@ -54,7 +54,7 @@ fluidPage(
     column(4,
       p("mRNA expression"),
       plotOutput("fig3"), 
-      selectInput("smooth_method3", "Smoother",
+      selectInput("fig3_smooth_method", "Smoother",
         choices = c(
           "(none)" = "(none)", 
           "Linear regression" = "lm", 

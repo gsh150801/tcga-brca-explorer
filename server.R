@@ -23,7 +23,7 @@ function(input, output) {
   conn <- CGDS("http://www.cbioportal.org/public-portal/")
 
   retrieved_tcga_data <- reactive({
-    input$retrieve_button
+    input$retrieve_data_button
     ids <- split_query_str(isolate(input$query_str))
     retrieve_tcga_data(conn, ids)
   })
@@ -175,8 +175,8 @@ function(input, output) {
           x = paste0(input$var_x, ", mRNA expression (log2 RNA-seq)"), 
           y = paste0(input$var_y, ", mRNA expression (log2 RNA-seq)"))
     }
-    if (input$smooth_method3 != "(none)")
-      gg <- gg + geom_smooth(col = "darkred", method = input$smooth_method3)
+    if (input$fig3_smooth_method != "(none)")
+      gg <- gg + geom_smooth(col = "darkred", method = input$fig3_smooth_method)
     if (input$by_subtype)
       gg <- gg + facet_wrap(~ subtype2, nrow = 2, as.table = FALSE)
     plot(gg)
