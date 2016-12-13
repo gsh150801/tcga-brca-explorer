@@ -45,15 +45,15 @@ fluidPage(
   fluidRow(
     column(4,
       p("Predicted somatic non-silent mutations"),
-      plotOutput("plot1"), 
+      plotOutput("fig1"), 
       checkboxInput("show_mut", "Show mutations in graphics", value = FALSE),
       tableOutput("tab1")),
     column(4,
       p("Putative copy-number alterations (CNA)"),
-      plotOutput("plot2")),
+      plotOutput("fig2")),
     column(4,
       p("mRNA expression"),
-      plotOutput("plot3"), 
+      plotOutput("fig3"), 
       selectInput("smooth_method3", "Smoother",
         choices = c(
           "(none)" = "(none)", 

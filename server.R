@@ -81,7 +81,7 @@ function(input, output) {
     tab1
   })
   
-  output$plot1 <- renderPlot({
+  output$fig1 <- renderPlot({
     if (input$show_mut) {
       gg <- assembled_graphics_data() %>%
         filter(!is.na(x_mut) & !is.na(y)) %>%
@@ -120,7 +120,7 @@ function(input, output) {
     plot(gg)
   })
   
-  output$plot2 <- renderPlot({
+  output$fig2 <- renderPlot({
     gg <- assembled_graphics_data() %>%
       filter(!is.na(x_gistic) & !is.na(y)) %>%
       ggplot(aes(x = x_gistic, y = y)) 
@@ -154,7 +154,7 @@ function(input, output) {
     plot(gg)
   })
   
-  output$plot3 <- renderPlot({
+  output$fig3 <- renderPlot({
     gg <- assembled_graphics_data() %>%
       filter(!is.na(x_rna) & !is.na(y)) %>%
       ggplot(aes(x = x_rna, y = y)) 
