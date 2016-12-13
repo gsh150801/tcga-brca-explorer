@@ -1,7 +1,7 @@
 library(shiny)
 
 fluidPage(
-  titlePanel("TCGA Breast Cancer Data Explorer"),
+  titlePanel("TCGA breast cancer data explorer"),
   fluidRow(
     column(12,
       p(

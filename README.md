@@ -1,4 +1,4 @@
-TCGA Breast Cancer Data Explorer
+TCGA breast cancer data explorer
 ================================
 
 This is a [Shiny app](http://shiny.rstudio.com/) to perform basic explorations of TCGA breast cancer data retrieved from [cBioPortal](http://www.cbioportal.org/).
