@@ -5,7 +5,11 @@ fluidPage(
   fluidRow(
     column(12,
       p(
-        "Basic exploration of TCGA breast cancer data retrieved from",
+        "Basic exploration of", 
+        a("TCGA",
+          href = "http://cancergenome.nih.gov",
+          target = "_blank"),
+        "breast cancer data retrieved from",
         a("cBioPortal",
           href = "http://www.cbioportal.org/",
           target = "_blank")),
@@ -13,7 +17,7 @@ fluidPage(
         a("TCGA publication guidelines", 
           href = "http://cancergenome.nih.gov/abouttcga/policies/publicationguidelines",
           target = "_blank"), 
-        "when using TCGA data in your publications.", 
+        "when using TCGA data in publications.", 
         br(),
         "Please cite",
         a("Gao et al. Sci. Signal. 2013", 
@@ -25,7 +29,7 @@ fluidPage(
           target = "_blank"), 
         "when publishing results based on cBioPortal."))
   ),  
-  h3("Preparations"),
+  h3("Data retrieval"),
   fluidRow(
     column(4,
       wellPanel(
@@ -38,8 +42,7 @@ fluidPage(
         uiOutput("var_y_ui"),
         uiOutput("var_x_ui")
       ))), 
-  h3("Graphics"),
-  p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
+  h3("Data visualisation"),
   checkboxInput("mark_mut", "Mark mutations in all graphics", value = FALSE),
   checkboxInput("by_subtype", "Facet by molecular subtype", value = FALSE),
   fluidRow(
@@ -63,6 +66,7 @@ fluidPage(
       p("Spearman's rank correlation coefficient, r"),
       tableOutput("tab2"))
   ),
+  p('To save a figure to file, left-click/ctrl-click on the image and "Save Image As..." (or similar, depending on web browser).'),
   hr(),
   p(
     "© 2016 John Lövrot",
@@ -77,5 +81,5 @@ fluidPage(
       href = "https://github.com/lovrot/tcga-brca-explorer",
       target = "_blank"),
     br(),
-    "Version 0.0.0.9015")
+    "Version 0.1.0")
 )
