@@ -57,6 +57,10 @@ retrieve_tcga_data <- function(conn, ids) {
 
 perform_subtype_classification <- function(conn, pam50centroids) {
 
+  ## TODO
+  ## Change to Agilent microarray data instead
+  ## Same platform as the PAM50 centroids
+  
   exprs <- getProfileData(conn,
     genes = row.names(pam50centroids),
     geneticProfiles = "brca_tcga_rna_seq_v2_mrna",
