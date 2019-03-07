@@ -15,7 +15,7 @@ colmutcat <- c("(germline)" = "black", "mutated" = "#1070b8")
 alphamutcat <- c("(germline)" = 0.5, "mutated" = 1)
 shapemutcat <- c("(germline)" = 1, "mutated" = 16)
 
-conn <- CGDS("http://www.cbioportal.org/public-portal/")
+conn <- CGDS("http://www.cbioportal.org/")
 subtype_data <- perform_subtype_classification(conn, pam50centroids)
 
 function(input, output) {
