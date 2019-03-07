@@ -19,7 +19,6 @@ conn <- CGDS("http://www.cbioportal.org/")
 subtype_data <- perform_subtype_classification(conn, pam50centroids)
 
 function(input, output) {
-  conn <- CGDS("http://www.cbioportal.org/public-portal/")
 
   retrieved_tcga_data <- reactive({
     input$retrieve_data_button
