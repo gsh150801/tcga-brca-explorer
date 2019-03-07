@@ -81,5 +81,5 @@ fluidPage(
       href = "https://github.com/lovrot/tcga-brca-explorer",
       target = "_blank"),
     br(),
-    "Version 0.1.0")
+    "Version 0.1.1")
 )
